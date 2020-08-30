@@ -96,7 +96,7 @@ if __name__=='__main__':
             #time.sleep(1)
         print("正在写入第%d条数据"%(i))
 
-        if i % 5000 == 0:
+        if i % 2500 == 0:
 
             dataframe = pd.DataFrame({'数据库内部编号':listaa,'时间':lista,'tagid':listb,'类型':listc,'内容':listd}) # 只使用时间，内容
             filename = 'sinaFinance7x24_' + str(cnt) + '_.csv'
