@@ -22,6 +22,11 @@ def getUid(url):
 
 def test(ids):
     '''
+    简化每个用户的信息
+    input:
+        ids: 用户id列表
+    output:
+        alllist: 用户列表，其中每条类似于dic {'uid':xxx, 'username':xxx, 'active':xxx, 'msgCountByMonth':xxx, 'keyChange':xxx, 'attitudeChange':xxx}
     '''
     alllist = []
     
