@@ -64,41 +64,57 @@ def listDicDisplay(listdic):
     #print('id:',tag_id_str,'     类型:',type_str)
     #print('内容:',rich_text_str)
 
-    return create_timez_str, tag_id_str, type_str, rich_text_str
+    return data_id_str,create_timez_str, tag_id_str, type_str, rich_text_str
 
 
        
 if __name__=='__main__':
 
+    
+    listaa = []
     lista = []
-    #listb = []
-    #listc = []
+    listb = []
+    listc = []
     listd = []
 
-    cnt = 0
-    for i in range(1,1000000):
+    start = 1 #指定开始条数
+    cnt = start
+    for i in range(start,10001):
         base_url_new = 'http://zhibo.sina.com.cn/api/zhibo/feed?callback=jQuery0&page=' + str(i) + '&page_size=1&zhibo_id=152&tag_id=3&dire=f&dpc=1&pagesize=2&_=0%20Request%20Method:GET'
 
         json_date = getJsonStr(base_url_new)
         jsaoutput_dic = jsonStrAnalysis(json_date)
         for dataid in jsaoutput_dic.keys():
-            a,b,c,d = listDicDisplay(jsaoutput_dic[dataid])
+            aa,a,b,c,d = listDicDisplay(jsaoutput_dic[dataid])
+            listaa.append(str(aa))
             lista.append(str(a))
-            #listb.append(str(b))
-            #listc.append(str(c))
+            listb.append(str(b))
+            listc.append(str(c))
             listd.append(str(d))
 
             #print(richtextstr)
             #time.sleep(1)
         print("正在写入第%d条数据"%(i))
 
-        if i % 200 == 0:
+        if i % 5000 == 0:
 
-            dataframe = pd.DataFrame({'时间':lista,'内容':listd}) # 只使用时间，内容
+            dataframe = pd.DataFrame({'数据库内部编号':listaa,'时间':lista,'tagid':listb,'类型':listc,'内容':listd}) # 只使用时间，内容
             filename = 'sinaFinance7x24_' + str(cnt) + '_.csv'
             dataframe.to_csv(filename,index=False,sep=',',encoding="utf_8_sig") # 解决中文乱码问题
             cnt += 1
+            listaa = []
             lista = []
-            #listb = []
-            #listc = []
+            listb = []
+            listc = []
             listd = []
+
+    #write unwrite data
+    dataframe = pd.DataFrame({'数据库内部编号':listaa,'时间':lista,'tagid':listb,'类型':listc,'内容':listd}) # 只使用时间，内容
+    filename = 'sinaFinance7x24_' + str(cnt) + '_.csv'
+    dataframe.to_csv(filename,index=False,sep=',',encoding="utf_8_sig") # 解决中文乱码问题
+    cnt += 1
+    listaa = []
+    lista = []
+    listb = []
+    listc = []
+    listd = []
