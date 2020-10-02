@@ -10,6 +10,9 @@ import pandas as pd
 
 
 def getJsonStr(base_url):
+    '''
+    
+    '''
     json_str =''
     try:
         headers = {'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; InfoPath.3)'}
@@ -77,9 +80,9 @@ if __name__=='__main__':
     listc = []
     listd = []
 
-    start = 1 #指定开始条数
+    start = 20001 #指定开始条数
     cnt = start
-    for i in range(start,10001):
+    for i in range(start,30001):
         base_url_new = 'http://zhibo.sina.com.cn/api/zhibo/feed?callback=jQuery0&page=' + str(i) + '&page_size=1&zhibo_id=152&tag_id=3&dire=f&dpc=1&pagesize=2&_=0%20Request%20Method:GET'
 
         json_date = getJsonStr(base_url_new)
