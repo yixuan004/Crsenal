@@ -18,7 +18,7 @@ def getAccessToken(clientId, clientSecret):
 	return accessToken
 
 
-def matchCompanyName(accessToken, text_1, text_2):
+def compareCompanyName(accessToken, text_1, text_2):
 
 	basicURL = 'https://aip.baidubce.com/rpc/2.0/nlp/v2/simnet?'
 	accessTokenURL = 'access_token=' + accessToken
@@ -39,4 +39,4 @@ if __name__ == '__main__':
 	clientSecret = ''
 	accessToken = getAccessToken(clientId, clientSecret)
 	#提供了一种按照score排序的可能，问题是检索一次数据库，反复调用compare接口恐怕会消耗过多次数，如何避免
-	matchCompanyName(accessToken, '广州恒大', '广州恒大淘宝')
+	compareCompanyName(accessToken, '广州恒大', '广州恒大淘宝')
