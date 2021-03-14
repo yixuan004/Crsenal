@@ -111,24 +111,75 @@ def getContent(title, url, time):
     # with open('respnse-html保存/debug-5.html', 'a+', encoding='utf-8') as writer:
     #     writer.write(content)
     
-    selectMainTitlePath = "body > div.main-content.w1240 > h1"
-    mainTitle = soup.select(selectMainTitlePath)[0].get_text() # 获取标题
+    if 'http://finance.sina.com.cn' in url or 'http://t.cj.sina.com.cn' in url:
+        selectMainTitlePath = "body > div.main-content.w1240 > h1"
+        mainTitle = soup.select(selectMainTitlePath)[0].get_text() # 获取标题
+        selectMainArticlePath = "#artibody"
+        mainArticle = soup.select(selectMainArticlePath)[0].get_text().strip().replace("\n", '').replace("海量资讯、精准解读，尽在新浪财经APP", '') # 获取正文
+    elif 'http://k.sina.com.cn' in url:
+        selectMainTitlePath = "body > div.main-content.w1240 > h1"
+        mainTitle = soup.select(selectMainTitlePath)[0].get_text() # 获取标题
+        selectMainArticlePath = "#article"
+        mainArticle = soup.select(selectMainArticlePath)[0].get_text().strip().replace("\n", '') # 获取正文-
+    
     print("mainTitle", mainTitle)
-
-    selectMainArticlePath = "#artibody"
-    mainArticle = soup.select(selectMainArticlePath)[0].get_text().strip().replace("\n", '').replace("海量资讯、精准解读，尽在新浪财经APP", '') # 获取正文
     print("mainArticle", mainArticle)
-
     return mainTitle, mainArticle, time
     
+def saveFile(fileDir, fileName, mainArticle):
+    '''
+    说明：
+        写文件函数，后续可以根据需要拓展，现在可以根据文件夹路径和文件名写文件
+    input:
+        fileDir:
+            dataType: str
+            说明: 文件保存的路径（一个文件夹）
+            示例: /Users/curious/Desktop/news/
+        fileName:
+            dataType: str
+            说明: 想要把文件保存成什么文件名（注：有时候文件名不能包含特殊字符会出现异常，暂时没处理）
+            示例: 中国建设银行获评“最佳零售银行大奖”
+        mainArticle:
+            dataType: str
+            说明: 要写入文件中的内容
+            示例: 日前，由《零售银行》《数字银行》联合腾讯云共同举办的“第四届中国零售金融创新实践大奖评选”公布获奖名单。
+    output:
+        status:
+            dataType: str
+            说明: 写入是否成功，成功为SUCCESS，不成功为ERROR
+            示例: SUCCESS
+    '''
+    try:
+        with open(fileDir+fileName+'.txt', 'a+', encoding='utf-8') as writer:
+            writer.write(mainArticle)
+        return 'SUCCESS'
+    except:
+        return 'ERROR'
 
 if __name__ == '__main__':
 
     tempDataList = getURLDataFromSina(
-        keyword = '中国银行', 
+        keyword = '建设银行', 
         pageSize = 10, 
         page = 5
     )
+
+    # 批量遍历，一条一条调用getContent
+    for item in tempDataList:
+        title = item[0]
+        url = item[1]
+        time = item[2]
+        mainTitle, mainArticle, time = getContent(
+            title = title, 
+            url = url, 
+            time = time
+        )
+        # 写文件
+        saveFile(
+            fileDir = '/Users/curious/Desktop/news/', 
+            fileName = mainTitle, 
+            mainArticle = mainArticle
+        )
 
     # getContent(
     #     title = "中国银行行长，人选落定！", 
